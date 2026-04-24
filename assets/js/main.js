@@ -2,8 +2,25 @@ const menuToggle = document.querySelector(".menu-toggle");
 const menu = document.querySelector(".menu");
 
 if (menuToggle && menu) {
+  const closeMenu = () => {
+    menu.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+
+  menuToggle.setAttribute("aria-expanded", "false");
   menuToggle.addEventListener("click", () => {
-    menu.classList.toggle("open");
+    const isOpen = menu.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
   });
 }
 
@@ -100,21 +117,38 @@ function initHeroSlider() {
 }
 
 function initSupportCardHover() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
   const cards = document.querySelectorAll(".support-grid .support-item");
   if (!cards.length) return;
 
   cards.forEach((card) => {
+    let rafId = 0;
+    let pendingX = 0;
+    let pendingY = 0;
+
+    const flush = () => {
+      rafId = 0;
+      card.style.setProperty("--hover-x", `${pendingX}px`);
+      card.style.setProperty("--hover-y", `${pendingY}px`);
+    };
+
     function updatePointerPosition(event) {
       const rect = card.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      card.style.setProperty("--hover-x", `${x}px`);
-      card.style.setProperty("--hover-y", `${y}px`);
+      pendingX = event.clientX - rect.left;
+      pendingY = event.clientY - rect.top;
+      if (!rafId) {
+        rafId = window.requestAnimationFrame(flush);
+      }
     }
 
     card.addEventListener("pointerenter", updatePointerPosition);
     card.addEventListener("pointermove", updatePointerPosition);
     card.addEventListener("pointerleave", () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
       card.style.removeProperty("--hover-x");
       card.style.removeProperty("--hover-y");
     });
