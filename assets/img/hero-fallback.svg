@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" role="img" aria-label="TTD hero fallback">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e6fe0"/>
+      <stop offset="55%" stop-color="#35a5ee"/>
+      <stop offset="100%" stop-color="#65d2ea"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="22%" cy="20%" r="62%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="980" fill="url(#bg)"/>
+  <rect width="1600" height="980" fill="url(#shine)"/>
+  <circle cx="1450" cy="840" r="240" fill="#ffffff" fill-opacity="0.12"/>
+  <circle cx="180" cy="120" r="170" fill="#ffffff" fill-opacity="0.08"/>
+</svg>
